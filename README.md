@@ -8,5 +8,5 @@
 - Arguments:
   - `./lotrix [width] [height] [max_amount] [rainbow] [message]`
 - Binds:
-  - `KEY_SPACE/KEY_P` - Pause/unpause.
-  - `KEY_F` - Toggle fullscreen.
+  - `KEY_SPACE/KEY_P` - Pause.
+  - `KEY_F` - Fullscreen.
