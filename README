@@ -16,4 +16,7 @@ BINDS
 
 TO-DO
 [X] Total rewrite
+    '-- Simpler concept with less features;
+    '-- Less memory usage;
+    '-- Smaller code.
 [X] Improve font
