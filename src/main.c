@@ -1,102 +1,84 @@
-#include <raylib.h>
 #include <stdlib.h>
-#include <string.h>
+#include <raylib.h>
 
-#define LO(a, b) (a < b) ? a : b
-#define HI(a, b) (a > b) ? a : b
-#define WWIDTH 600
-#define WHEIGHT 600
+#define LO(a, b) (a < b) ? a : b;
+#define HI(a, b) (a > b) ? a : b;
 
-int genRand(int min, int max) { return min + rand() % (max - min + 1); }
+int random_range(int min, int max) { return min + rand() % (max - min + 1); }
 
-int main(int argc, char* argv[]) {
-    const int RWIDTH = (argc > 1) ? atoi(argv[1]) : 128, RHEIGHT = (argc > 2) ? atoi(argv[2]) : RWIDTH;
+int main(int argc, char *argv[]) {
+    const int WIDTH = (argc > 1) ? atoi(argv[1]) : 128, HEIGHT = (argc > 2) ? atoi(argv[2]) : WIDTH;
     bool paused = false;
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-	InitWindow(WWIDTH, WHEIGHT, "Lotrix");
-	SetTargetFPS(60);
-	RenderTexture2D surface = LoadRenderTexture(RWIDTH, RHEIGHT);
-	SetTextureFilter(surface.texture, TEXTURE_FILTER_POINT);
-    Font font = LoadFont("font.png");
 
-    struct Grid { int x[RWIDTH / 8], y[RHEIGHT / 8]; }; struct Grid grid;
-    for (int i = 0; i < RWIDTH / 8; i++) { grid.x[i] = i * 8; }
-    for (int i = 0; i < RHEIGHT / 8; i++) { grid.y[i] = i * 8; }
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(256, 256, "lotrix");
+    SetTargetFPS(60);
+    RenderTexture2D surface = LoadRenderTexture(WIDTH, HEIGHT);
+    SetTextureFilter(surface.texture, TEXTURE_FILTER_POINT);
+    Font font = LoadFont("../src/textures/font.png");
 
-    const int MAX = (argc > 3) ? atoi(argv[3]) : HI(RWIDTH / 4, RHEIGHT / 4);
+    const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH / 2, HEIGHT / 2);
+    const int TAIL   = (argc > 4) ? atoi(argv[4]) : 6;
 
-    struct C {
-        float x, y, speed;
+    int column[WIDTH / 8];
+    for (int i = 0; i < WIDTH / 8; i++) { column[i] = i * 8; }
+
+    int line[HEIGHT / 8];
+    for (int i = 0; i < HEIGHT / 8; i++) { line[i] = i * 8; }
+
+    struct TXT {
+        float x, y, delay;
+        int delay_def;
         char type[2];
-        int r, g, b, SPD;
-    }; struct C c[MAX];
+    }; struct TXT txt[AMOUNT];
 
-    for (int i = 0; i < MAX; i++) {
-        c[i].x = grid.x[genRand(0, RWIDTH / 8)];
-        c[i].y = grid.y[genRand(0, RHEIGHT / 8)] - RHEIGHT;
-        c[i].SPD = genRand(1, 12);
-        c[i].type[0] = genRand(32, 127);
-        c[i].type[1] = '\0';
-
-        if (argc > 4 && strcmp(argv[4], "true") == 0) {
-            c[i].r = genRand(50, 255);
-            c[i].g = genRand(50, 255);
-            c[i].b = genRand(50, 255);
-        } else {
-            c[i].r = 0;
-            c[i].g = 255;
-            c[i].b = 0;
-        }
+    for (int i = 0; i < AMOUNT; i++) {
+        txt[i].x         = column[random_range(0, WIDTH / 8)];
+        txt[i].y         = -line[random_range(0, HEIGHT / 8)];
+        txt[i].delay_def = random_range(1, 12);
+        txt[i].delay     = 0;
+        txt[i].type[0]   = random_range(32, 127);
+        txt[i].type[1]   = '\0';
     }
 
-	while (!WindowShouldClose()) {
-        float surfaceScale = LO((float)GetScreenWidth() / RWIDTH, (float)GetScreenHeight() / RHEIGHT);
+    while (!WindowShouldClose()) {
+        float surf_scale = LO((float)GetScreenWidth() / WIDTH, (float)GetScreenHeight() / HEIGHT);
         if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_P)) { paused = (!paused) ? true : false; }
         if (IsKeyPressed(KEY_F)) { ToggleBorderlessWindowed(); }
-        HideCursor();
 
         BeginTextureMode(surface);
             if (!paused) {
-                ClearBackground((Color) { 0, 0, 0, 24 });
+                ClearBackground(BLACK);
 
-                for (int i = 0; i < MAX; i++) {
-                    DrawRectangle(c[i].x, c[i].y, 7, 7, (Color) { 0, 0, 0, 255 });
-                    DrawRectangle(c[i].x, c[i].y - 8, 7, 7, (Color) { 0, 0, 0, 255 });
-                    DrawRectangle(c[i].x, c[i].y, 7, 7, (Color) { c[i].r, c[i].g, c[i].b, 75 });
-                    DrawTextEx(font, c[i].type, (Vector2) { c[i].x, c[i].y - 8 }, 8, 0, (Color) { c[i].r, c[i].g, c[i].b, 255 });
-                    DrawTextEx(font, c[i].type, (Vector2) { c[i].x, c[i].y }, 8, 0, WHITE);
+                for (int i = 0; i < AMOUNT; i++) {
+                    DrawTextEx(font, txt[i].type, (Vector2) { txt[i].x, txt[i].y }, 8, 0, WHITE);
 
-                    if (c[i].speed > 0) { c[i].speed -= GetFrameTime() * 240; }
+                    for (int j = 1; j < TAIL; j++) {
+                        DrawTextEx(font, txt[i].type, (Vector2) { txt[i].x, txt[i].y - 8 * j }, 8, 0, (Color) { 0, 255, 0, 255 / j });
+                    }
+
+                    if (txt[i].delay > 0) { txt[i].delay -= GetFrameTime() * 240; }
                     else {
-                        c[i].y += 8;
-                        c[i].type[0] = genRand(32, 127);
-                        c[i].speed = c[i].SPD;
+                        txt[i].y += 8;
+                        txt[i].type[0] = random_range(32, 127);
+                        txt[i].delay = txt[i].delay_def;
+                    }
 
-                        if (c[i].y - 8 > RHEIGHT) {
-                            c[i].x = grid.x[genRand(0, RWIDTH / 8)];
-                            c[i].y = grid.y[genRand(0, RHEIGHT / 8)] - RHEIGHT;
-                        }
+                    if (txt[i].y - 8 * TAIL > HEIGHT) {
+                        txt[i].x = column[random_range(0, WIDTH / 8)];
+                        txt[i].y = -line[random_range(0, HEIGHT / 8)];
                     }
                 }
-
-                if (argc > 5 && strlen(argv[5]) > 0) {
-                    DrawRectangle(RWIDTH / 2 - ((strlen(argv[5]) / 2) * 8) - 8, RHEIGHT / 2 - 16, strlen(argv[5]) * 8 + 16, 24, BLACK);
-                    DrawTextEx(font, argv[5], (Vector2) { RWIDTH / 2 - ((strlen(argv[5]) / 2) * 8), RHEIGHT / 2 - 8 }, 8, 0, WHITE);
-                }
-            } else { ClearBackground((Color) { 0, 0, 0, 0 }); }
+            }
         EndTextureMode();
 
         BeginDrawing();
-            DrawTexturePro(surface.texture, (Rectangle) { 0, 0, (float)surface.texture.width, (float)-surface.texture.height }, (Rectangle) { (GetScreenWidth() - (float)RWIDTH * surfaceScale) / 2, (GetScreenHeight() - ((float)RHEIGHT * surfaceScale)) / 2, (float)RWIDTH * surfaceScale, (float)RHEIGHT * surfaceScale }, (Vector2) { 0, 0 }, 0, WHITE);
-            DrawRectangle(0, 0, GetScreenWidth(), (GetScreenHeight() - RHEIGHT * surfaceScale) / 2, BLACK);
-            DrawRectangle(0, GetScreenHeight() - (GetScreenHeight() - RHEIGHT * surfaceScale) / 2, GetScreenWidth(), GetScreenHeight(), BLACK);
-            DrawRectangle(0, 0, (GetScreenWidth() - RWIDTH * surfaceScale) / 2, GetScreenHeight(), BLACK);
-            DrawRectangle(GetScreenWidth() - (GetScreenWidth() - RWIDTH * surfaceScale) / 2, 0, GetScreenWidth(), GetScreenHeight(), BLACK);
+            DrawTexturePro(surface.texture, (Rectangle) { 0, 0, (float)surface.texture.width, (float)-surface.texture.height }, (Rectangle) { (GetScreenWidth() - (float)WIDTH * surf_scale) / 2, (GetScreenHeight() - ((float)HEIGHT * surf_scale)) / 2, (float)WIDTH * surf_scale, (float)HEIGHT * surf_scale }, (Vector2) { 0, 0 }, 0, WHITE);
         EndDrawing();
-	}
+    }
 
-	UnloadRenderTexture(surface);
+    UnloadRenderTexture(surface);
     UnloadFont(font);
-	CloseWindow();
-	return 0;
+    CloseWindow();
+    return 0;
 }
