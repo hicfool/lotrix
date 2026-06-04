@@ -1,14 +1,17 @@
 [lotrix]
+
     * screenshot: https://raw.githubusercontent.com/hicfool/lotrix/refs/heads/main/ex/print.png
       (512x288)
 
 ---
 
 [args]
+
     * ./lotrix [width] [height] [max_amount] [rainbow] [message]
 
 ---
 
 [binds]
+
     * KEY_SPACE/KEY_P - Pause.
     * KEY_F - Fullscreen.
