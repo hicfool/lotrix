@@ -1,3 +1,3 @@
 #!/bin/sh
 
-gcc main.c -o lotrix -lraylib -lGL -lm -lX11
+gcc ../src/main.c -o lotrix -lraylib -lGL -lm -lX11
