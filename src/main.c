@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     SetTextureFilter(surface.texture, TEXTURE_FILTER_POINT);
     Font font = LoadFont("../src/textures/font.png");
 
-    const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH / 2, HEIGHT / 2);
+    const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH, HEIGHT);
     const int TAIL   = (argc > 4) ? atoi(argv[4]) : 6;
 
     int column[WIDTH / 8];
