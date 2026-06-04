@@ -1,10 +1,10 @@
 LOTRIX
 
----
-
 PRINT
 https://raw.githubusercontent.com/hicfool/lotrix/refs/heads/main/other/print.png
 (512x288)
+
+---
 
 ARGS
 * ./lotrix [WIDTH] [HEIGHT] [AMOUNT] [RAINBOW] [MSG]
@@ -12,6 +12,8 @@ ARGS
 BINDS
 * KEY_SPACE || KEY_P - Pause
 * KEY_F              - Fullscreen
+
+---
 
 TO-DO
 * Total rewrite
