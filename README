@@ -1,6 +1,6 @@
 [lotrix]
     • screenshot: https://raw.githubusercontent.com/hicfool/lotrix/refs/heads/main/print.png
-              (512x288)
+      (512x288)
 
 [args]
     • ./lotrix [width] [height] [max_amount] [rainbow] [message]
