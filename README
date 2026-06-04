@@ -7,7 +7,7 @@ https://raw.githubusercontent.com/hicfool/lotrix/refs/heads/main/other/print.png
 ---
 
 ARGS
-* ./lotrix [WIDTH] [HEIGHT] [AMOUNT] [RAINBOW] [MSG]
+* ./lotrix [WIDTH] [HEIGHT] [AMOUNT] [TAIL]
 
 BINDS
 * KEY_SPACE || KEY_P - Pause
@@ -16,5 +16,5 @@ BINDS
 ---
 
 TO-DO
-[ ] Total rewrite
+[X] Total rewrite
 [X] Improve font
