@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
                 DrawTextEx(font, txt[i].type, (Vector2){ txt[i].x, txt[i].y }, 8, 0, WHITE);
 
                 for (int j = 1; j < TAIL; j++) {
-                    Vector2 pos = { txt[i].x, txt[i].y - 8 * j};
+                    Vector2 pos = { txt[i].x, txt[i].y - 8 * j };
                     Color c     = { 0, 255, 0, 255 / j };
 
                     DrawTextEx(font, txt[i].type, pos, 8, 0, c);
