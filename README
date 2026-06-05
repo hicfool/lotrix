@@ -20,5 +20,6 @@ TO-DO
 [X] Total rewrite
     '-- Simpler concept with less features;
     '-- Less memory usage;
-    '-- Smaller code.
+    '-- Smaller code;
+    '-- Better syntax.
 [X] Improve font
