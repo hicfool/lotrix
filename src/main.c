@@ -7,7 +7,7 @@
 int random_range(int min, int max) { return min + rand() % (max - min + 1); }
 
 int main(int argc, char *argv[]) {
-    const int WIDTH = (argc > 1) ? atoi(argv[1]) : 128, HEIGHT = (argc > 2) ? atoi(argv[2]) : WIDTH;
+    const int WIDTH  = (argc > 1) ? atoi(argv[1]) : 128, HEIGHT = (argc > 2) ? atoi(argv[2]) : WIDTH;
     const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH, HEIGHT);
     const int TAIL   = (argc > 4) ? atoi(argv[4]) : 6;
     bool paused = false;
