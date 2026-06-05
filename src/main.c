@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     const int WIDTH  = (argc > 1) ? atoi(argv[1]) : 128, HEIGHT = (argc > 2) ? atoi(argv[2]) : WIDTH;
     const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH, HEIGHT);
     const int TAIL   = (argc > 4) ? atoi(argv[4]) : 6;
-    bool paused = false;
+    bool paused      = false;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(256, 256, "lotrix");
@@ -41,38 +41,55 @@ int main(int argc, char *argv[]) {
     }
 
     while (!WindowShouldClose()) {
-        float surf_scale = LO((float)GetScreenWidth() / WIDTH, (float)GetScreenHeight() / HEIGHT);
+        float scale = LO((float)GetScreenWidth() / WIDTH, (float)GetScreenHeight() / HEIGHT);
+        float tw    = surface.texture.width;
+        float th    = surface.texture.height;
+        float sw    = GetScreenWidth();
+        float sh    = GetScreenHeight();
+        float w     = WIDTH  * scale;
+        float h     = HEIGHT * scale;
+
         if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_P)) { paused = (!paused) ? true : false; }
         if (IsKeyPressed(KEY_F)) { ToggleBorderlessWindowed(); }
 
         BeginTextureMode(surface);
-            if (!paused) {
-                ClearBackground(BLACK);
 
-                for (int i = 0; i < AMOUNT; i++) {
-                    DrawTextEx(font, txt[i].type, (Vector2) { txt[i].x, txt[i].y }, 8, 0, WHITE);
+        if (!paused) {
+            ClearBackground(BLACK);
 
-                    for (int j = 1; j < TAIL; j++) {
-                        DrawTextEx(font, txt[i].type, (Vector2) { txt[i].x, txt[i].y - 8 * j }, 8, 0, (Color) { 0, 255, 0, 255 / j });
-                    }
+            for (int i = 0; i < AMOUNT; i++) {
+                DrawTextEx(font, txt[i].type, (Vector2){ txt[i].x, txt[i].y }, 8, 0, WHITE);
 
-                    if (txt[i].delay > 0) { txt[i].delay -= GetFrameTime() * 240; }
-                    else {
-                        txt[i].y += 8;
-                        txt[i].type[0] = random_range(32, 127);
-                        txt[i].delay = txt[i].delay_def;
-                    }
+                for (int j = 1; j < TAIL; j++) {
+                    Vector2 pos = { txt[i].x, txt[i].y - 8 * j};
+                    Color c     = { 0, 255, 0, 255 / j };
 
-                    if (txt[i].y - 8 * TAIL > HEIGHT) {
-                        txt[i].x = column[random_range(0, WIDTH / 8)];
-                        txt[i].y = -line[random_range(0, HEIGHT / 8)];
-                    }
+                    DrawTextEx(font, txt[i].type, pos, 8, 0, c);
+                }
+
+                if (txt[i].delay > 0) { txt[i].delay -= GetFrameTime() * 240; }
+                else {
+                    txt[i].y += 8;
+                    txt[i].type[0] = random_range(32, 127);
+                    txt[i].delay = txt[i].delay_def;
+                }
+
+                if (txt[i].y - 8 * TAIL > HEIGHT) {
+                    txt[i].x = column[random_range(0, WIDTH / 8)];
+                    txt[i].y = -line[random_range(0, HEIGHT / 8)];
                 }
             }
+        }
+
         EndTextureMode();
 
         BeginDrawing();
-            DrawTexturePro(surface.texture, (Rectangle) { 0, 0, (float)surface.texture.width, (float)-surface.texture.height }, (Rectangle) { (GetScreenWidth() - (float)WIDTH * surf_scale) / 2, (GetScreenHeight() - ((float)HEIGHT * surf_scale)) / 2, (float)WIDTH * surf_scale, (float)HEIGHT * surf_scale }, (Vector2) { 0, 0 }, 0, WHITE);
+
+        DrawTexturePro(surface.texture,
+            (Rectangle){ 0, 0, tw, -th },
+            (Rectangle){ (sw - w) / 2, (sh - h) / 2, w, h },
+            (Vector2){ 0 }, 0, WHITE);
+
         EndDrawing();
     }
 
