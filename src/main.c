@@ -69,9 +69,9 @@ int main(int argc, char *argv[]) {
 
                 if (txt[i].delay > 0) { txt[i].delay -= GetFrameTime() * 240; }
                 else {
-                    txt[i].y += 8;
+                    txt[i].y      += 8;
                     txt[i].type[0] = random_range(32, 127);
-                    txt[i].delay = txt[i].delay_def;
+                    txt[i].delay   = txt[i].delay_def;
                 }
 
                 if (txt[i].y - 8 * TAIL > HEIGHT) {
