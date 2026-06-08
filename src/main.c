@@ -1,5 +1,6 @@
 #include <stdlib.h>
-#include <raylib.h>
+
+#include "../lib/raylib.h"
 
 #define LO(a, b) (a < b) ? a : b;
 #define HI(a, b) (a > b) ? a : b;
@@ -10,10 +11,11 @@ int main(int argc, char *argv[]) {
     const int WIDTH  = (argc > 1) ? atoi(argv[1]) : 128, HEIGHT = (argc > 2) ? atoi(argv[2]) : WIDTH;
     const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH, HEIGHT);
     const int TAIL   = (argc > 4) ? atoi(argv[4]) : 6;
-    bool paused      = false;
+    int paused       = 0;
+    Color bg         = { 0, 0, 0, 255 };
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(256, 256, "lotrix");
+    InitWindow(128, 128, "lotrix");
     SetTargetFPS(60);
     RenderTexture2D surface = LoadRenderTexture(WIDTH, HEIGHT);
     SetTextureFilter(surface.texture, TEXTURE_FILTER_POINT);
@@ -49,22 +51,20 @@ int main(int argc, char *argv[]) {
         float w     = WIDTH  * scale;
         float h     = HEIGHT * scale;
 
-        if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_P)) { paused = (!paused) ? true : false; }
-        if (IsKeyPressed(KEY_F)) { ToggleBorderlessWindowed(); }
+        if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_P)) { paused = (!paused) ? 1 : 0; }
 
         BeginTextureMode(surface);
 
         if (!paused) {
-            ClearBackground(BLACK);
+            ClearBackground(bg);
 
             for (int i = 0; i < AMOUNT; i++) {
-                DrawTextEx(font, txt[i].type, (Vector2){ txt[i].x, txt[i].y }, 8, 0, WHITE);
-
-                for (int j = 1; j < TAIL; j++) {
+                for (int j = 1; j < TAIL + 1; j++) {
                     Vector2 pos = { txt[i].x, txt[i].y - 8 * j };
-                    Color c     = { 0, 255, 0, 255 / j };
+                    int c       = (j == 1) ? 200 : 0;
+                    Color fg    = { c, 255, c, 255 / j };
 
-                    DrawTextEx(font, txt[i].type, pos, 8, 0, c);
+                    DrawTextEx(font, txt[i].type, pos, 8, 0, fg);
                 }
 
                 if (txt[i].delay > 0) { txt[i].delay -= GetFrameTime() * 240; }
