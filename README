@@ -1,8 +1,7 @@
 LOTRIX
 
 PRINTS
-https://raw.githubusercontent.com/hicfool/lotrix/refs/heads/main/misc/img.png
-https://raw.githubusercontent.com/hicfool/lotrix/refs/heads/main/misc/anim.gif
+./misc/print.png
 
 ---
 
@@ -11,14 +10,11 @@ ARGS
 
 BINDS
 * KEY_SPACE || KEY_P - Pause
-* KEY_F              - Fullscreen
 
 ---
 
 TO-DO
 [X] Total rewrite
-    '-- Simpler concept with less features;
-    '-- Less memory usage;
-    '-- Smaller code;
-    '-- Better syntax.
-[X] Improve font
+    '--[X] Smaller/better code;
+    '--[X] More accurate look.
+[X] Improved font
