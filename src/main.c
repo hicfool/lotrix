@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 
 #include "../lib/raylib.h"
 
@@ -9,13 +10,15 @@ int random_range(int min, int max) { return min + rand() % (max - min + 1); }
 
 int main(int argc, char *argv[]) {
     const int WIDTH  = (argc > 1) ? atoi(argv[1]) : 128, HEIGHT = (argc > 2) ? atoi(argv[2]) : WIDTH;
-    const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH, HEIGHT);
+    const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH * 2, HEIGHT * 2);
     const int TAIL   = (argc > 4) ? atoi(argv[4]) : 6;
     int paused       = 0;
     Color bg         = { 0, 0, 0, 255 };
 
+    srand(time(NULL));
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(128, 128, "lotrix");
+    InitWindow(WIDTH, HEIGHT, "lotrix");
     SetTargetFPS(60);
     RenderTexture2D surface = LoadRenderTexture(WIDTH, HEIGHT);
     SetTextureFilter(surface.texture, TEXTURE_FILTER_POINT);
