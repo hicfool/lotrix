@@ -7,7 +7,7 @@ PRINTS
 ---
 
 ARGS
-* ./lotrix [WIDTH] [HEIGHT] [AMOUNT] [TAIL]
+* ./lotrix [WIDTH] [HEIGHT] [AMOUNT]
 
 BINDS
 * KEY_SPACE || KEY_P - Pause
