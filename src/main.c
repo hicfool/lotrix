@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
                     DrawTextEx(font, txt[i].type, pos, 8, 0, fg);
                 }
 
-                if (txt[i].delay > 0) { txt[i].delay -= GetFrameTime() * 240; }
+                if (txt[i].delay > 0) { txt[i].delay -= GetFrameTime() * 120; }
                 else {
                     txt[i].y      += 8;
                     txt[i].type[0] = random_range(32, 127);
