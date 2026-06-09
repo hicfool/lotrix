@@ -11,7 +11,6 @@ int random_range(int min, int max) { return min + rand() % (max - min + 1); }
 int main(int argc, char *argv[]) {
     const int WIDTH  = (argc > 1) ? atoi(argv[1]) : 128, HEIGHT = (argc > 2) ? atoi(argv[2]) : WIDTH;
     const int AMOUNT = (argc > 3) ? atoi(argv[3]) : HI(WIDTH * 2, HEIGHT * 2);
-    const int TAIL   = (argc > 4) ? atoi(argv[4]) : 6;
     int paused       = 0;
     Color bg         = { 0, 0, 0, 255 };
 
@@ -32,7 +31,7 @@ int main(int argc, char *argv[]) {
 
     struct TXT {
         float x, y, delay;
-        int delay_def;
+        int delay_def, tail;
         char type[2];
     }; struct TXT txt[AMOUNT];
 
@@ -41,6 +40,7 @@ int main(int argc, char *argv[]) {
         txt[i].y         = -line[random_range(0, HEIGHT / 8)];
         txt[i].delay_def = random_range(1, 12);
         txt[i].delay     = 0;
+        txt[i].tail      = random_range(3, 9);
         txt[i].type[0]   = random_range(32, 127);
         txt[i].type[1]   = '\0';
     }
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
             ClearBackground(bg);
 
             for (int i = 0; i < AMOUNT; i++) {
-                for (int j = 1; j < TAIL + 1; j++) {
+                for (int j = 1; j < txt[i].tail + 1; j++) {
                     Vector2 pos = { txt[i].x, txt[i].y - 8 * j };
                     int c       = (j == 1) ? 200 : 0;
                     Color fg    = { c, 255, c, 255 / j };
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
                     txt[i].delay   = txt[i].delay_def;
                 }
 
-                if (txt[i].y - 8 * TAIL > HEIGHT) {
+                if (txt[i].y - 8 * txt[i].tail > HEIGHT) {
                     txt[i].x = column[random_range(0, WIDTH / 8)];
                     txt[i].y = -line[random_range(0, HEIGHT / 8)];
                 }
